@@ -1,12 +1,19 @@
-const express = require('express');
+// ==========================================================================================================
+// En esta sección creamos el middelware para la ruta /usuario, para eso usaremos los siguientes paquetes:
+// Express: para manejar la solicitud http,
+// Bcryptjs: para encriptar la contraseña ingresada por el usuario. 
+// Underscore: porque nos proporciona utilidades que nos facilitan la vida, en este caso usaremos 'pick'
+// que sirve para obtener un objeto con características específicas
+// ==========================================================================================================
 
-const bcrypt = require('bcryptjs');
-const _ = require('underscore');
+const express = require('express'); //Traemos la funcionalidad del paquete express.
+const bcrypt = require('bcryptjs'); //Traemos la funcionalidad del paquete bcryptjs.
+const _ = require('underscore'); //Traemos la funcionalidad del paquete underscore.
 
-const Usuario = require('../models/usuario');
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+const Usuario = require('../models/usuario'); //Traemos el esquema de usuario que exportamos en el modelo.
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion'); //Traemos los middelwares de autenticación.
 
-const app = express();
+const app = express(); // Declaramos app como una instancia del objeto express.
 
 
 app.get('/usuario', verificaToken, (req, res) => {
