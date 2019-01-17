@@ -51,5 +51,5 @@ Usuario.count({ estado: true }, (err, conteo) => {
 
 app.listen(process.env.PORT, () => {
     console.log('Escuchando puerto: ', process.env.PORT);
-    console.log(process.env);//procesos
+    console.log(process.env);
 });
