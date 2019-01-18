@@ -48,16 +48,12 @@ app.get('/usuario', verificaToken, (req, res) => {
             }
 
             Usuario.count({ estado: true }, (err, cantidad) => { // Contamos la cantidad de registros 
-
                 res.json({ // Retornamos el json con los registros dentro de las condiciones y la cantidad de registros.
                     ok: true,
                     usuarios,
                     cantidad
                 });
-
             });
-
-
         });
 
 
@@ -65,40 +61,37 @@ app.get('/usuario', verificaToken, (req, res) => {
 
 app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 
-    let body = req.body;
+    let body = req.body; // Tomamos el body de la solicitud y lo guardamos en 'body'
 
-    let usuario = new Usuario({
+    let usuario = new Usuario({ // Creamos una instancia de usuario con los datos del body
         nombre: body.nombre,
         email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
+        password: bcrypt.hashSync(body.password, 10), // Encriptamos el password del usuario
         role: body.role
     });
 
 
-    usuario.save((err, usuarioDB) => {
+    usuario.save((err, usuarioDB) => { // Guardamos el usuario
 
-        if (err) {
+        if (err) { // Si hay error retornamos un json con el error
             return res.status(400).json({
                 ok: false,
                 err
             });
         }
-
-        res.json({
+        res.json({ // Si no hay error retornamos el usuario que se guardó
             ok: true,
             usuario: usuarioDB
         });
-
-
     });
-
-
 });
 
 app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
-    let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
+    let id = req.params.id; // Obtenemos el id pasado como parámetro
+    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']); // Solo tomamos elementos específicos del body
+
+    // https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
 
@@ -108,24 +101,26 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) 
                 err
             });
         }
-
-
-
         res.json({
             ok: true,
             usuario: usuarioDB
         });
-
     })
 
 });
+
+// Aqui en el delete no borraremos el registro, solo vamos a cambiarle su estado a false.
 
 app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
 
     let id = req.params.id;
 
+    // ============================================================================================
+    // Si quisieramos que se elimine el registro en vez de cambiar de estado sería solo usar
+    // la siguiente línea con el método 'findByIdAndRemove' en vez de 'findByIdAndUpdate':
     // Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+    // ============================================================================================
 
     let cambiaEstado = {
         estado: false

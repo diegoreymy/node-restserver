@@ -6,7 +6,7 @@
 // =================================================================================================
 
 
-const mongoose = require('mongoose'); // //Traemos la funcionalidad del paquete mongoose
+const mongoose = require('mongoose'); //Traemos la funcionalidad del paquete mongoose
 const uniqueValidator = require('mongoose-unique-validator'); // //Traemos la funcionalidad del paquete mongoose-unique-validator
 
 

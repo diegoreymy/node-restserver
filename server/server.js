@@ -1,13 +1,13 @@
 require('./config/config');
 
-const express = require('express');
-const mongoose = require('mongoose');
+const express = require('express'); //Traemos la funcionalidad del paquete express.
+const mongoose = require('mongoose'); //Traemos la funcionalidad del paquete mongoose
 
-const bcrypt = require('bcryptjs');
-const Usuario = require('./models/usuario');
+const bcrypt = require('bcryptjs'); //Traemos la funcionalidad del paquete bcryptjs.
+const Usuario = require('./models/usuario'); //Traemos el esquema de usuario que exportamos en el modelo.
 
 
-const app = express();
+const app = express(); // Declaramos app como una instancia del objeto express.
 
 const bodyParser = require('body-parser');
 
@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 app.use(require('./routes/index'));
 
 
-
+// Nos conectamos a la Base de Datos
 mongoose.connect(process.env.URLDB, (err, res) => {
 
     if (err) throw err;
@@ -30,6 +30,8 @@ mongoose.connect(process.env.URLDB, (err, res) => {
     console.log('Base de datos ONLINE');
 
 });
+
+// Creamos un usuario administrar inicial para poder administrar la aplicación.
 Usuario.count({ estado: true }, (err, conteo) => {
 
     if (conteo == 0) {
@@ -49,6 +51,7 @@ Usuario.count({ estado: true }, (err, conteo) => {
 
 });
 
+// Activamos la escucha al puerto seleccionado.
 app.listen(process.env.PORT, () => {
     console.log('Escuchando puerto: ', process.env.PORT);
 });
