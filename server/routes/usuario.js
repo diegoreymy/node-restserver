@@ -15,20 +15,30 @@ const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticac
 
 const app = express(); // Declaramos app como una instancia del objeto express.
 
+// ==================================================================================================================
+// A continuación vamos a construir los metodos para las solicitudes http get, post, put y delete.
+// En todas usamos la ruta, el middlware verificaToken que importamos, la solicitud (req) y damos una respuesta (res)
+// Y en el post, put y delete usamos el middleware verificaAdmin_Role para hacer que solo el Admin tenga acceso. 
+// ==================================================================================================================
 
 app.get('/usuario', verificaToken, (req, res) => {
 
+    // ========================================================================================
+    // Esto es opcional: si se quiere, se pasará como parametros en la url un inicio y
+    // la cantidad de usuarios a retornar por ejemplo, https://url/usuario?desde=0&cantidad=7
+    // si no se coloca nada llegarán por defecto solo 5 registros.
+    // ========================================================================================
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
-    let limite = req.query.limite || 5;
-    limite = Number(limite);
+    let cantidad = req.query.cantidad || 5;
+    cantidad = Number(cantidad);
 
-    Usuario.find({ estado: true }, 'nombre email role estado google img')
-        .skip(desde)
-        .limit(limite)
-        .exec((err, usuarios) => {
+    Usuario.find({ estado: true }, 'nombre email role estado img') // Buscamos registros con estado 'true' y traemos los campos especificados.
+        .skip(desde) // Saltamos con 'skip' la cantidad de registros que vienen en el parámetro 'desde'.
+        .limit(cantidad) // Traemos con 'limit' la cantidad de registros que coloquemos en el parámetro 'cantidad'.
+        .exec((err, usuarios) => { // ejecutamos la función 'find' con las condiciones que pasamos.
 
             if (err) {
                 return res.status(400).json({
@@ -37,12 +47,12 @@ app.get('/usuario', verificaToken, (req, res) => {
                 });
             }
 
-            Usuario.count({ estado: true }, (err, conteo) => {
+            Usuario.count({ estado: true }, (err, cantidad) => { // Contamos la cantidad de registros 
 
-                res.json({
+                res.json({ // Retornamos el json con los registros dentro de las condiciones y la cantidad de registros.
                     ok: true,
                     usuarios,
-                    cuantos: conteo
+                    cantidad
                 });
 
             });

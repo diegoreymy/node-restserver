@@ -46,13 +46,14 @@ let usuarioSchema = new Schema({ // Creamos una instancia del objeto Schema.
         default: 'USER_ROLE', // Por defecto los roles serán 'USER_ROLE'.
         enum: rolesValidos // Usamos el objeto rolesValidos creado arriba.
     },
+    // ===================================================================================
+    // Un usuario que haya sido eliminado no será borrado completamente, en su lugar su
+    // estado cambiara a false, y cuando se hagan solicitudes get, solo mostrará usuarios
+    // con un estado true. 
+    // ===================================================================================
     estado: {
         type: Boolean,
         default: true
-    },
-    google: {
-        type: Boolean,
-        default: false
     }
 });
 
