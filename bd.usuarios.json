@@ -1,0 +1,143 @@
+{ 
+    "_id" : ObjectId("5c486fa211157852fc1fdb2b"), 
+    "first_name" : "Diego", 
+    "last_name" : "Reymy", 
+    "email" : "diegoreymy@gmail.com", 
+    "password" : "$2a$10$N7HF1qf08nqsN.uiTyi1EeJmDEBnleiwD2qpXtQyPZ.9HTiDo/vT2", 
+    "role" : "ADMIN_ROLE", 
+    "avatar" : "https://s.gravatar.com/avatar/2ddb45d841a8d860cda834cb232a8484?s=80", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48707311157852fc1fdb2c"), 
+    "first_name" : "George", 
+    "last_name" : "Bluth", 
+    "email" : "georgebluth@gmail.com", 
+    "password" : "$2a$10$edCL/mXdSHZ9m3Sca0mkX.FS4AgnKS8N11ayGsNVMGfoz1CYoeW1.", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c4870a111157852fc1fdb2d"), 
+    "first_name" : "Janet", 
+    "last_name" : "Weaver", 
+    "email" : "janetwaever@gmail.com", 
+    "password" : "$2a$10$H5MZeRuij4m0uzMJoQTxruQmIe590H/fr/3AiWYlH/GYevKmuTVRK", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/josephstein/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c4874e511157852fc1fdb2e"), 
+    "first_name" : "Emma", 
+    "last_name" : "Wong", 
+    "email" : "emmawong@gmail.com", 
+    "password" : "$2a$10$sBtR8EGLPHRhS/sAuWGHCeDyQAo9hl6tk1wWbOplOVPuDyMO9Bo5i", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/olegpogodaev/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48751e11157852fc1fdb2f"), 
+    "first_name" : "Eve", 
+    "last_name" : "Holt", 
+    "email" : "eveholt@gmail.com", 
+    "password" : "$2a$10$gm.uqwFcXaLm7Y3nHEjmGu52.Hluo.aMTgeU.P4XO4VqCjXTc6Tdq", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/marcoramires/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48753c11157852fc1fdb30"), 
+    "first_name" : "Charles", 
+    "last_name" : "Morris", 
+    "email" : "charlesmorris@gmail.com", 
+    "password" : "$2a$10$pL3Ltj725koQ2v4znQqtP.Uh0YboeZoeWkPMSX5q1medJ/oWtmRN2", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/stephenmoon/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48755711157852fc1fdb31"), 
+    "first_name" : "Tracey", 
+    "last_name" : "Ramos", 
+    "email" : "tracyramos@gmail.com", 
+    "password" : "$2a$10$RnoA1nZUV/cs7egQG0Btg.vj1SlTWUo/NkCfQrK7M0nVBb6Ne77Dm", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/bigmancho/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48757511157852fc1fdb32"), 
+    "first_name" : "Michael", 
+    "last_name" : "Lawson", 
+    "email" : "michaellawson@gmail.com", 
+    "password" : "$2a$10$mOjtEAnWDLsvgb0gtzVdb.03m70AOzd.No/oRZyTJ1.rUf6gvVQxS", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/follettkyle/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48759511157852fc1fdb33"), 
+    "first_name" : "Lindsay", 
+    "last_name" : "Ferguson", 
+    "email" : "lindsayferguson@gmail.com", 
+    "password" : "$2a$10$KcLJ1daqrXqvfjGqIBwG4Od69bmqOC6pb9rkSHXMg6l3jb3up5Tqm", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/araa3185/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c4875ae11157852fc1fdb34"), 
+    "first_name" : "Tobias", 
+    "last_name" : "Funke", 
+    "email" : "tobiasfunke@gmail.com", 
+    "password" : "$2a$10$koxnziQa599v5TqaRPEXduTzHBEW/.XEICqx3KRJBQ6Z0HPUSGBy6", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/vivekprvr/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c4875cc11157852fc1fdb35"), 
+    "first_name" : "Byron", 
+    "last_name" : "Fields", 
+    "email" : "byronfields@gmail.com", 
+    "password" : "$2a$10$9qFrNmUP9jjUvQFYIgWjxulK8fhCT5pp9ddimNytKcT01qvx2.vSq", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/russoedu/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c4875ea11157852fc1fdb36"), 
+    "first_name" : "George", 
+    "last_name" : "Edwards", 
+    "email" : "georgeedwards@gmail.com", 
+    "password" : "$2a$10$UUsOWiZphuXW6Jg5K2SgZeN2oBCfMEs9F1aCvSK9Za41/r3Bky9yy", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/mrmoiree/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5c48760411157852fc1fdb37"), 
+    "first_name" : "Rachel", 
+    "last_name" : "Howell", 
+    "email" : "rachelhowell@gmail.com", 
+    "password" : "$2a$10$laNoAs/Mk1rQxcsJxnvQhuoBdUneOgAKGL/CsFS1WYQq/7F44RBLa", 
+    "role" : "USER_ROLE", 
+    "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/hebertialmeida/128.jpg", 
+    "estado" : true, 
+    "__v" : NumberInt(0)
+}
