@@ -40,16 +40,20 @@ var funciones = {
             }
             $.ajax(opciones)
                 .done(callback)
-                .fail(function() {
-                    console.log("error en el servicio")
-                })
+                .fail(callback);
         },
         login: function(respuesta) {
-            var fecha = new Date();
-            fecha.setMinutes((fecha.getMinutes()) + 20);
-            localStorage.setItem('token', respuesta.token);
-            localStorage.setItem('expiracionToken', fecha);
-            window.location = "index.html"
+            if(respuesta.token){
+                var fecha = new Date();
+                fecha.setMinutes((fecha.getMinutes()) + 20);
+                localStorage.setItem('token', respuesta.token);
+                localStorage.setItem('usuario', JSON.stringify(respuesta.usuario));
+                localStorage.setItem('expiracionToken', fecha);
+                window.location = "index.html"
+            }else{
+                $("#modalLogin .modal-body").text(respuesta.responseJSON.err.message);
+                $('#modalLogin').modal('show');
+            }
         },
         submit: function() {
             var email = $("#formulario-login #email").val();
@@ -99,6 +103,7 @@ var funciones = {
             localStorage.removeItem('expiracionToken');
             localStorage.removeItem('usuarios');
             localStorage.removeItem('paginas');
+            localStorage.removeItem('usuario');
             window.location = "login.html";
         }
     },
@@ -127,7 +132,7 @@ var funciones = {
                 opciones = {
                     "method": "GET",
                     "async": true,
-                    "url": "/usuario?desde=0&cantidad=" + totalUsuarios,
+                    "url": "/usuario?desde=1&cantidad=" + totalUsuarios,
                     "headers": {
                         "token": localStorage.getItem('token'),
                     }
@@ -149,7 +154,7 @@ var funciones = {
                     localStorage.setItem("usuarios", JSON.stringify(usuarios));
                 })
                 .then(function() {
-                    funciones.usuarios.paginacion(12)
+                    funciones.usuarios.paginacion(totalUsuarios)
                     funciones.usuarios.usuariosPorPagina();
                     funciones.usuarios.listaUsuariosPorPagina();
                     funciones.usuarios.buscar();
@@ -157,7 +162,12 @@ var funciones = {
         },
     },
     usuarios: {
+        identificarUsuario: function(){
+            var usuarioActual = JSON.parse(localStorage.getItem("usuario"))
+            $('#logged .panel-heading h2').text(`Bienvenido, ${usuarioActual.first_name} ! `)
+        },
         listar: function(listUsuarios) {
+            funciones.usuarios.identificarUsuario();
             $("#lista tbody tr").remove();
             listUsuarios.map(function(usuario) {
                 var elemUsuario = '<tr id="' + usuario._id + '">' +
