@@ -21,11 +21,12 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev'; // Si estuviese en heroku 
 // ============================
 //  Vencimiento del Token
 // ============================
+// 1000 Milisegundos
 // 60 segundos
 // 60 minutos
 // 24 horas
 // 30 días
-process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30; // Este es el tiempo de caducidad del token almacenado en el process enviroment.
+process.env.CADUCIDAD_TOKEN = 1000 * 60 * 60 * 24 * 30; // Este es el tiempo de caducidad del token almacenado en el process enviroment.
 
 
 // ============================
