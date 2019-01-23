@@ -10,6 +10,7 @@ const app = express(); // Declaramos app como una instancia del objeto express.
 
 app.use(require('./usuario')); //declaramos la ubicación del middelware para la ruta /usuarios.
 app.use(require('./login')); //declaramos la ubicación del middelware para la ruta /login.
+app.use(express.static('public'));
 
 
 
