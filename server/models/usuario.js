@@ -24,9 +24,13 @@ definiendo los campos y sus caracteristicas.
 */
 
 let usuarioSchema = new Schema({ // Creamos una instancia del objeto Schema.
-    nombre: {
+    first_name: {
         type: String,
         required: [true, 'El nombre es necesario']
+    },
+    last_name: {
+        type: String,
+        required: [true, 'El apellido es necesario']
     },
     email: {
         type: String,
@@ -37,7 +41,7 @@ let usuarioSchema = new Schema({ // Creamos una instancia del objeto Schema.
         type: String,
         required: [true, 'La contraseña es obligatoria']
     },
-    img: {
+    avatar: {
         type: String,
         required: false
     },

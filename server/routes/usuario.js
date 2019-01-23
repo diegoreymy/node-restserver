@@ -35,7 +35,7 @@ app.get('/usuario', verificaToken, (req, res) => {
     let cantidad = req.query.cantidad || 5;
     cantidad = Number(cantidad);
 
-    Usuario.find({ estado: true }, 'nombre email role estado img') // Buscamos registros con estado 'true' y traemos los campos especificados.
+    Usuario.find({ estado: true }, 'first_name last_name email role estado avatar') // Buscamos registros con estado 'true' y traemos los campos especificados.
         .skip(desde) // Saltamos con 'skip' la cantidad de registros que vienen en el parámetro 'desde'.
         .limit(cantidad) // Traemos con 'limit' la cantidad de registros que coloquemos en el parámetro 'cantidad'.
         .exec((err, usuarios) => { // ejecutamos la función 'find' con las condiciones que pasamos.
@@ -50,7 +50,7 @@ app.get('/usuario', verificaToken, (req, res) => {
             Usuario.count({ estado: true }, (err, cantidad) => { // Contamos la cantidad de registros 
                 res.json({ // Retornamos el json con los registros dentro de las condiciones y la cantidad de registros.
                     ok: true,
-                    usuarios,
+                    data: usuarios,
                     cantidad
                 });
             });
@@ -64,10 +64,12 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
     let body = req.body; // Tomamos el body de la solicitud y lo guardamos en 'body'
 
     let usuario = new Usuario({ // Creamos una instancia de usuario con los datos del body
-        nombre: body.nombre,
+        first_name: body.first_name,
+        last_name: body.last_name,
         email: body.email,
         password: bcrypt.hashSync(body.password, 10), // Encriptamos el password del usuario
-        role: body.role
+        role: body.role,
+        avatar: body.avatar
     });
 
 
@@ -89,7 +91,7 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let id = req.params.id; // Obtenemos el id pasado como parámetro
-    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']); // Solo tomamos elementos específicos del body
+    let body = _.pick(req.body, ['first_name', 'last_name', 'email', 'avatar', 'role', 'estado']); // Solo tomamos elementos específicos del body
 
     // https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate
 

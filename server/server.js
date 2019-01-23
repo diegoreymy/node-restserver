@@ -36,10 +36,12 @@ Usuario.count({ estado: true }, (err, conteo) => {
 
     if (conteo == 0) {
         let adminUser = new Usuario({
-            nombre: 'admin',
+            first_name: 'Diego',
+            last_name: 'Reymy',
             email: 'diegoreymy@gmail.com',
             password: bcrypt.hashSync('18637718', 10),
-            role: 'ADMIN_ROLE'
+            role: 'ADMIN_ROLE',
+            avatar: 'https://s.gravatar.com/avatar/2ddb45d841a8d860cda834cb232a8484?s=80'
         });
 
         adminUser.save(err => {
