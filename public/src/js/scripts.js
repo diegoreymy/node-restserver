@@ -34,7 +34,7 @@ var funciones = {
             };
             var opciones = {
                 "async": true,
-                "url": "https://diegoreymy.herokuapp.com/login",
+                "url": "/login",
                 "method": "POST",
                 "data": datos
             }
@@ -108,7 +108,7 @@ var funciones = {
                 opciones = {
                     "method": "GET",
                     "async": true,
-                    "url": "https://diegoreymy.herokuapp.com/usuario",
+                    "url": "/usuario",
                     "headers": {
                         "token": localStorage.getItem('token'),
                     }
@@ -127,7 +127,7 @@ var funciones = {
                 opciones = {
                     "method": "GET",
                     "async": true,
-                    "url": "https://diegoreymy.herokuapp.com/usuario?desde=1&hasta=" + totalUsuarios,
+                    "url": "/usuario?desde=0&cantidad=" + totalUsuarios,
                     "headers": {
                         "token": localStorage.getItem('token'),
                     }
@@ -160,8 +160,8 @@ var funciones = {
         listar: function(listUsuarios) {
             $("#lista tbody tr").remove();
             listUsuarios.map(function(usuario) {
-                var elemUsuario = '<tr id="' + usuario.id + '">' +
-                    '<td class="id">' + usuario.id + '</td>' +
+                var elemUsuario = '<tr id="' + usuario._id + '">' +
+                    '<td class="id">' + usuario._id + '</td>' +
                     '<td class="nombre">' + usuario.first_name + '</td>' +
                     '<td class="apellido">' + usuario.last_name + '</td>' +
                     '<td class="detalles"> <button type="button" class="btnDetalles btn btn-warning glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles"></button> </td>' +
@@ -178,7 +178,7 @@ var funciones = {
                 busqueda = [];
                 listUsuarios.map(function(usuario, posicion) {
                     if (texto !== "") {
-                        var cadena = (usuario.id + " " + usuario.first_name + " " + usuario.last_name).toString().toLowerCase();
+                        var cadena = (usuario._id + " " + usuario.first_name + " " + usuario.last_name).toString().toLowerCase();
                         if (cadena.indexOf(texto) > -1) {
                             busqueda.push(listUsuarios[posicion])
                             funciones.usuarios.listar(busqueda);
@@ -199,7 +199,7 @@ var funciones = {
             $("#modalDetalles .modal-body tr").remove();
             var listUsuarios = JSON.parse(localStorage.getItem("usuarios"))
             var usuario = listUsuarios.filter(function(usuario) {
-                return usuario.id == id
+                return usuario._id == id
             })
             usuario = usuario[0];
             var detalles = '<div class="row detalles">' +
@@ -208,7 +208,7 @@ var funciones = {
                 '<img src="' + usuario.avatar + '" alt="' + usuario.first_name + " " + usuario.last_name + '">' +
                 '<div class="caption">' +
                 '<h3>' + usuario.first_name + " " + usuario.last_name + '</h3>' +
-                '<p>ID del usuario: ' + usuario.id + '</p>' +
+                '<p>ID del usuario: ' + usuario._id + '</p>' +
                 '</div></div></div></div>';
 
             $("#modalDetalles .modal-body").append(detalles);
