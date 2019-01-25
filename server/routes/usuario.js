@@ -91,8 +91,10 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     let id = req.params.id; // Obtenemos el id pasado como parámetro
-    let body = _.pick(req.body, ['first_name', 'last_name', 'email', 'avatar', 'role', 'estado']); // Solo tomamos elementos específicos del body
-
+    let body = _.pick(req.body, ['first_name', 'last_name', 'password', 'email', 'avatar', 'role', 'estado']); // Solo tomamos elementos específicos del body
+    if(body.password){
+        body.password = bcrypt.hashSync(body.password, 10); // Encriptamos la contraseña que se actualizará (si existe).
+    }
     // https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {

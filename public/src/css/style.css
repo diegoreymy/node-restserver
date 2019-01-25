@@ -61,6 +61,10 @@ body {
     border-color: #59B2E6;
 }
 
+.acciones .btn{
+    margin-right: 4px;
+}
+
 .btn-login:hover,
 .btn-login:focus {
     color: #fff;
@@ -101,4 +105,15 @@ nav .inputBuscar{
 }
 #lista tr.info th i{
     cursor: pointer;
+}
+
+/* Modal de Edicion de Usuario */
+
+#modalEditar .help-block{
+    right: 20px;
+    top: 30px;
+}
+#modalEditar .has-feedback .form-control-feedback{
+    top: -5px;
+    right: 15px;
 }

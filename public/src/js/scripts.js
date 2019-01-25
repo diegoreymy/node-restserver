@@ -75,7 +75,7 @@ var funciones = {
             var password = $("#formulario-login #password").val();
             var error = '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="help-block">Campo Obligatorio</span>'
             var correcto = '<span class="glyphicon glyphicon-ok form-control-feedback"></span>'
-            var validar = password === "" ?
+            password === "" ?
                 $("#password").closest(".form-group").append(error).addClass('has-error') :
                 $("#password").closest(".form-group").append(correcto).addClass('has-success')
         },
@@ -84,6 +84,17 @@ var funciones = {
             funciones.formulario.validarPassword();
             $("#formulario-login .has-error").length === 0 && funciones.formulario.submit();
         },
+        editarUsuario: {
+            validarNombre: function() {
+                $("#modalEditar #first_name").closest(".form-group").removeClass("has-error has-success").find("span").remove();
+                var nombre = $("#modalEditar #first_name").val();
+                var error = '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="help-block">Campo Obligatorio</span>'
+                var correcto = '<span class="glyphicon glyphicon-ok form-control-feedback"></span>'
+                nombre === "" ?
+                    $("#modalEditar #first_name").closest(".form-group").append(error).addClass('has-error') :
+                    $("#modalEditar #first_name").closest(".form-group").append(correcto).addClass('has-success')
+            },
+        }
     },
     sesion: {
         loginExpirado: function() {
@@ -162,23 +173,82 @@ var funciones = {
         },
     },
     usuarios: {
-        identificarUsuario: function(){
+
+        servicioEditar: function(id, usuario){
+            return new Promise(function(callback){
+                opciones = {
+                    "method" : "PUT",
+                    "async" : true,
+                    "url" : "/usuario/" + id,
+                    "headers" : {
+                        'token' : localStorage.getItem('token')
+                    },
+                    "data" : usuario,
+                }
+                $.ajax(opciones)
+                    .done(function(respuesta){
+                        callback(respuesta)
+                    })
+                    .fail(function(respuesta){
+                        callback(respuesta)
+                    })
+            })
+        },
+        saludarUsuario: function(){
             var usuarioActual = JSON.parse(localStorage.getItem("usuario"))
-            $('#logged .panel-heading h2').text(`Bienvenido, ${usuarioActual.first_name} ! `)
+            $('#logged .panel-heading h2').text(`Bienvenido, ${usuarioActual.first_name}!`)
+        },
+        editarUsuario: function(id) {
+            var listUsuarios = JSON.parse(localStorage.getItem("usuarios"));
+            var usuario = listUsuarios.filter(function(usuario) {
+                return usuario._id == id
+            })
+            $('#modalEditar input#first_name').val(usuario[0].first_name);
+            $('#modalEditar input#last_name').val(usuario[0].last_name);
+            $('#modalEditar input#email').val(usuario[0].email);
+            $('#modalEditar input#password').val(usuario[0].password);
+            $('#modalEditar input#avatar').val(usuario[0].avatar);
+
+            $('#modalEditar input#btnEditar').on("click", function(){
+                funciones.formulario.editarUsuario.validarNombre();
+                if( $("#modalEditar .has-error").length === 0) {
+                    var nombre = $('#modalEditar input#first_name').val();
+                    var apellido = $('#modalEditar input#last_name').val();
+                    var password = $('#modalEditar input#password').val();
+                    var avatar = $('#modalEditar input#avatar').val();
+                    var datos = {
+                        'first_name' : nombre,
+                        'last_name' : apellido,
+                        'password' : password,
+                        'avatar' : avatar
+                    }
+                    if(datos.password == ""){
+                        delete datos.password;
+                    }
+                    funciones.usuarios.servicioEditar(id, datos)
+                    .then(function(respuesta){
+                        if ( respuesta.ok == true ){
+                            console.log("Usuario Actualizado!")
+                        }
+                    })
+                }
+            })
         },
         listar: function(listUsuarios) {
-            funciones.usuarios.identificarUsuario();
+            funciones.usuarios.saludarUsuario();
             $("#lista tbody tr").remove();
             listUsuarios.map(function(usuario) {
                 var elemUsuario = '<tr id="' + usuario._id + '">' +
                     '<td class="id">' + usuario._id + '</td>' +
                     '<td class="nombre">' + usuario.first_name + '</td>' +
                     '<td class="apellido">' + usuario.last_name + '</td>' +
-                    '<td class="detalles"> <button type="button" class="btnDetalles btn btn-warning glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles"></button> </td>' +
+                    '<td class="acciones"> <button type="button" class="btnDetalles btn btn-warning glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles" data-id="' + usuario._id + '"></button>'+
+                    '<button type="button" class="btnEditar btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalEditar" data-id="' + usuario._id + '"></button>'+
+                    ' </td>' +
                     '</tr>';
                 $("#lista tbody").append(elemUsuario);
-                funciones.usuarios.clickDetalles();
             })
+            funciones.usuarios.clickAcciones();
         },
         buscar: function() {
             var listUsuarios = JSON.parse(localStorage.getItem("usuarios"))
@@ -223,11 +293,15 @@ var funciones = {
 
             $("#modalDetalles .modal-body").append(detalles);
         },
-        clickDetalles: function() {
+        clickAcciones: function() {
             $(".btnDetalles").on("click", function() {
                 $("#modalDetalles .modal-body .detalles").remove();
-                var id = $(this).closest("tr").attr("id")
+                var id = $(this).data("id");
                 funciones.usuarios.obtenerDetalles(id);
+            })
+            $(".btnEditar").on("click", function() {
+                var id = $(this).data("id");
+                funciones.usuarios.editarUsuario(id);
             })
         },
         paginacion: function(elementosPorPagina) {
