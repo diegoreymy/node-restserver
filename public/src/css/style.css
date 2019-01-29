@@ -117,3 +117,13 @@ nav .inputBuscar{
     top: -5px;
     right: 15px;
 }
+
+/*Popup*/
+
+.alert.put, .alert.contadorSesion {
+    position: fixed;
+    top: 0;
+    right: 0;
+    display: none;
+}
+
