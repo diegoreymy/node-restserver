@@ -53,10 +53,14 @@
                               <label for="inputBuscar">Buscar usuarios: </label>
                               <input class="form-control" type="text" name="inputBuscar" id="inputBuscar" placeholder="Buscar usuario">
                            </div>
-                           <div class="form-group col-sm-3 pull-right">
+                           <div class="form-group col-sm-3">
                               <label for="usuariosPorPagina">Usuarios por página: </label>
                               <select class="form-control" id="usuariosPorPagina">
                               </select>
+                           </div>
+                           <div class="form-group col-sm-2 pull-right">
+                              <label for="btnCrear">Crear Usuario:</label>
+                              <button type="button" class="btnCrear btn btn-success glyphicon glyphicon-plus" data-toggle="modal" data-target="#modalCrear"></button>
                            </div>
                         </div>
                         <table id="lista" class="table table-hover table-bordered table-striped">
@@ -145,7 +149,7 @@
                                        <input type="text" class="form-control" id="avatar">
                                     </div>
                                  </div>
-                                 <input type="button" class="form-control btn btn-success" id="btnEditar" value="Editar">
+                                 <input type="button" class="form-control btn btn-success" id="btnEditar" value="Editar Usuario">
                               </form>
                            </div>
                            <div class="modal-footer">
@@ -153,6 +157,72 @@
                            </div>
                         </div>
                      </div>
+                  </div>
+                  <div class="modal fade" id="modalCrear" role="dialog">
+                        <div class="modal-dialog">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title">Crear Usuario</h4>
+                              </div>
+                              <div class="modal-body">
+                                 <form>
+                                    <div class="form-group row has-feedback">
+                                       <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                                       <div class="col-sm-10">
+                                          <input type="text" class="form-control" id="c_first_name">
+                                       </div> 
+                                    </div>
+                                    <div class="form-group row has-feedback">
+                                       <label for="apellido" class="col-sm-2 col-form-label">Apellido</label>
+                                       <div class="col-sm-10">
+                                          <input type="text" class="form-control" id="c_last_name">
+                                       </div>
+                                    </div>
+                                    <div class="form-group row has-feedback">
+                                       <label for="email" class="col-sm-2 col-form-label">Email</label>
+                                       <div class="col-sm-10">
+                                          <input type="email" class="form-control" id="c_email">
+                                       </div>
+                                    </div>
+                                    <div class="form-group row has-feedback">
+                                       <label for="pwd" class="col-sm-2 col-form-label">Password</label>
+                                       <div class="col-sm-10">
+                                          <input type="password" class="form-control" id="c_password">
+                                       </div>
+                                    </div>
+                                    <div class="form-group row has-feedback">
+                                       <label for="imagen" class="col-sm-2 col-form-label">Imagen</label>
+                                       <div class="col-sm-10">
+                                          <input type="text" class="form-control" id="c_avatar">
+                                       </div>
+                                    </div>
+                                    <input type="button" class="form-control btn btn-success" id="btnCrear" value="Crear Usuario">
+                                 </form>
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                              </div>
+                           </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="modalEliminar" role="dialog">
+                        <div class="modal-dialog">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title">Eliminar Usuario</h4>
+                              </div>
+                              <div class="modal-body">
+                                 <p>Seguro que desea eliminar el usuario <span></span>?</p>
+                                 <button type="button" class="btnRespEliminar btn btn-danger" data-dismiss="modal" value="si">Si</button>
+                                 <button type="button" class="btnRespEliminar btn btn-success" data-dismiss="modal" value="no">No</button>
+                              </div>
+                              <div class="modal-footer">
+                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                              </div>
+                           </div>
+                        </div>
                   </div>
                </div>
             </div>
@@ -162,6 +232,12 @@
          </div>
          <div class="alert alert-danger contadorSesion">
              
+         </div>
+         <div class="alert alert-success post crearUsuario">
+            <strong>Listo!</strong> El usuario se ha creado con éxito.
+         </div>
+         <div class="alert alert-success delete eliminarUsuario">
+            <strong>Listo!</strong> El usuario se ha eliminado con éxito.
          </div>
       </div>
       <script>

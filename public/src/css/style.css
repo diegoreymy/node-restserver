@@ -109,21 +109,27 @@ nav .inputBuscar{
 
 /* Modal de Edicion de Usuario */
 
-#modalEditar .help-block{
+#modalEditar .help-block, 
+#modalCrear .help-block{
     right: 20px;
     top: 30px;
 }
-#modalEditar .has-feedback .form-control-feedback{
+#modalEditar .has-feedback .form-control-feedback,
+#modalCrear .has-feedback .form-control-feedback{
     top: -5px;
     right: 15px;
 }
 
 /*Popup*/
 
-.alert.put, .alert.contadorSesion {
+.alert.put, .alert.contadorSesion, .alert.post.crearUsuario, .alert.delete.eliminarUsuario {
     position: fixed;
     top: 0;
     right: 0;
     display: none;
+}
+.modal .thumbnail img{
+    width: 150px;
+    height: 150px;
 }
 

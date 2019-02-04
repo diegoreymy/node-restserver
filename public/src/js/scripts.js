@@ -45,7 +45,7 @@ var funciones = {
         login: function(respuesta) {
             if(respuesta.token){
                 var fecha = new Date();
-                fecha.setMinutes((fecha.getMinutes()) + 1);
+                fecha.setMinutes((fecha.getMinutes()) + 20);
                 localStorage.setItem('token', respuesta.token);
                 localStorage.setItem('usuario', JSON.stringify(respuesta.usuario));
                 localStorage.setItem('expiracionToken', fecha);
@@ -117,6 +117,50 @@ var funciones = {
                 funciones.formulario.editarUsuario.validarNombre();
                 funciones.formulario.editarUsuario.validarApellido();
                 funciones.formulario.editarUsuario.validarEmail();
+            },
+        },
+        crearUsuario: {
+            validarNombre: function() {
+                $("#modalCrear #c_first_name").closest(".form-group").removeClass("has-error has-success").find("span").remove();
+                var nombre = $("#modalCrear #c_first_name").val();
+                var error = '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="help-block">Campo Obligatorio</span>'
+                var correcto = '<span class="glyphicon glyphicon-ok form-control-feedback"></span>'
+                nombre === "" ?
+                    $("#modalCrear #c_first_name").closest(".form-group").append(error).addClass('has-error') :
+                    $("#modalCrear #c_first_name").closest(".form-group").append(correcto).addClass('has-success')
+            },
+            validarApellido: function() {
+                $("#modalCrear #c_last_name").closest(".form-group").removeClass("has-error has-success").find("span").remove();
+                var nombre = $("#modalCrear #c_last_name").val();
+                var error = '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="help-block">Campo Obligatorio</span>'
+                var correcto = '<span class="glyphicon glyphicon-ok form-control-feedback"></span>'
+                nombre === "" ?
+                    $("#modalCrear #c_last_name").closest(".form-group").append(error).addClass('has-error') :
+                    $("#modalCrear #c_last_name").closest(".form-group").append(correcto).addClass('has-success')
+            },
+            validarPassword: function() {
+                $("#modalCrear #c_password").closest(".form-group").removeClass("has-error has-success").find("span").remove();
+                var nombre = $("#modalCrear #c_password").val();
+                var error = '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="help-block">Campo Obligatorio</span>'
+                var correcto = '<span class="glyphicon glyphicon-ok form-control-feedback"></span>'
+                nombre === "" ?
+                    $("#modalCrear #c_password").closest(".form-group").append(error).addClass('has-error') :
+                    $("#modalCrear #c_password").closest(".form-group").append(correcto).addClass('has-success')
+            },
+            validarEmail: function() {
+                $("#modalCrear #c_email").closest(".form-group").removeClass("has-error has-success").find("span").remove();
+                var email = $("#modalCrear #c_email").val();
+                var regexEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                var error = '<span class="glyphicon glyphicon-remove form-control-feedback"></span><span class="help-block">Eso no es un email</span>'
+                var correcto = '<span class="glyphicon glyphicon-ok form-control-feedback"></span>'
+                var validar = regexEmail.test(email) == false ?
+                    $("#modalCrear #c_email").closest(".form-group").append(error).addClass('has-error') :
+                    $("#modalCrear #c_email").closest(".form-group").append(correcto).addClass('has-success')
+            },
+            validarTodo: function() {
+                funciones.formulario.crearUsuario.validarNombre();
+                funciones.formulario.crearUsuario.validarApellido();
+                funciones.formulario.crearUsuario.validarEmail();
             },
         }
     },
@@ -240,6 +284,45 @@ var funciones = {
                     })
             })
         },
+        servicioCrear: function(usuario){
+            return new Promise(function(callback){
+                opciones = {
+                    "method" : "POST",
+                    "async" : true,
+                    "url" : "/usuario/",
+                    "headers" : {
+                        'token' : localStorage.getItem('token')
+                    },
+                    "data" : usuario,
+                }
+                $.ajax(opciones)
+                    .done(function(respuesta){
+                        callback(respuesta)
+                    })
+                    .fail(function(respuesta){
+                        callback(respuesta)
+                    })
+            })
+        },
+        servicioEliminar: function(id){
+            return new Promise(function(callback){
+                opciones = {
+                    "method" : "DELETE",
+                    "async" : true,
+                    "url" : "/usuario/" + id,
+                    "headers" : {
+                        'token' : localStorage.getItem('token')
+                    }
+                }
+                $.ajax(opciones)
+                    .done(function(respuesta){
+                        callback(respuesta)
+                    })
+                    .fail(function(respuesta){
+                        callback(respuesta)
+                    })
+            })
+        },
         saludarUsuario: function(){
             var usuarioActual = JSON.parse(localStorage.getItem("usuario"))
             $('#logged .panel-heading h2').text(`Bienvenido, ${usuarioActual.first_name}!`)
@@ -277,7 +360,7 @@ var funciones = {
                             $('.alert.put').slideDown("slow");
                             setTimeout(function(){
                                 $('.alert.put').slideUp("slow");
-                            },3000)
+                            },5000)
                         }
                     })
                     $('#modalEditar .modal-footer .btn').trigger('click');
@@ -285,6 +368,77 @@ var funciones = {
                     funciones.inicio();
                 }
             })
+        },
+        crearUsuario: function() {
+            $('#modalCrear input#c_first_name').val("");
+            $('#modalCrear input#c_last_name').val("");
+            $('#modalCrear input#c_email').val("");
+            $('#modalCrear input#c_password').val("");
+            $('#modalCrear input#c_avatar').val("");
+            $('#modalCrear span.form-control-feedback').remove()
+            $("#modalCrear input#btnCrear").off("click");
+            $('#modalCrear input#btnCrear').on("click", function(){
+                funciones.formulario.crearUsuario.validarTodo();
+                if( $("#modalCrear .has-error").length === 0) {
+                    var nombre = $('#modalCrear input#c_first_name').val();
+                    var apellido = $('#modalCrear input#c_last_name').val();
+                    var email = $('#modalCrear input#c_email').val();
+                    var password = $('#modalCrear input#c_password').val();
+                    var avatar = $('#modalCrear input#c_avatar').val();
+                    var datos = {
+                        'first_name' : nombre,
+                        'last_name' : apellido,
+                        'email' : email,
+                        'password' : password,
+                        'avatar' : avatar
+                    }
+                    if(datos.avatar == ""){
+                        datos.avatar = "/images/default-user.png"
+                    }
+                    funciones.usuarios.servicioCrear(datos)
+                    .then(function(respuesta){
+                        if ( respuesta.ok == true ){
+                            $('.alert.post.crearUsuario').slideDown("slow");
+                            setTimeout(function(){
+                                $('.alert.post.crearUsuario').slideUp("slow");
+                            },5000)
+                        }
+                    })
+                    $('#modalCrear .modal-footer .btn').trigger('click');
+                    $("#paginacionLista .pagination, #usuariosPorPagina").empty()
+                    funciones.inicio();
+                }
+            })
+        },
+        eliminarUsuario: function(id) {
+            var listUsuarios = JSON.parse(localStorage.getItem("usuarios"));
+            var usuario = listUsuarios.filter(function(usuario) {
+                return usuario._id == id
+            })
+
+            var nombre = usuario[0].first_name;
+            var apellido = usuario[0].last_name;
+
+            $('#modalEliminar .modal-body span').text(nombre + ' ' + apellido);
+
+            $('.btnRespEliminar').on('click', function(){
+                var respuesta = $(this).val();
+                if(respuesta == 'si'){
+                    funciones.usuarios.servicioEliminar(id)
+                    .then(function(respuesta){
+                        if ( respuesta.ok == true ){
+                            $('.alert.delete.eliminarUsuario').slideDown("slow");
+                            setTimeout(function(){
+                                $('.alert.delete.eliminarUsuario').slideUp("slow");
+                            },5000)
+                        }
+                    })
+                    $('#modalEliminar .modal-footer .btn').trigger('click');
+                    $("#paginacionLista .pagination, #usuariosPorPagina").empty()
+                    funciones.inicio();
+                }
+            })
+
         },
         listar: function(listUsuarios) {
             funciones.usuarios.saludarUsuario();
@@ -294,8 +448,9 @@ var funciones = {
                     '<td class="id">' + usuario._id + '</td>' +
                     '<td class="nombre">' + usuario.first_name + '</td>' +
                     '<td class="apellido">' + usuario.last_name + '</td>' +
-                    '<td class="acciones"> <button type="button" class="btnDetalles btn btn-warning glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles" data-id="' + usuario._id + '"></button>'+
+                    '<td class="acciones"> <button type="button" class="btnDetalles btn btn-primary glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles" data-id="' + usuario._id + '"></button>'+
                     '<button type="button" class="btnEditar btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalEditar" data-id="' + usuario._id + '"></button>'+
+                    '<button type="button" class="btnEliminar btn btn-danger glyphicon glyphicon-remove" data-toggle="modal" data-target="#modalEliminar" data-id="' + usuario._id + '"></button>'+
                     ' </td>' +
                     '</tr>';
                 $("#lista tbody").append(elemUsuario);
@@ -355,6 +510,13 @@ var funciones = {
                 var id = $(this).data("id");
                 funciones.usuarios.editarUsuario(id);
                 funciones.formulario.editarUsuario.validarTodo();
+            })
+            $(".btnCrear").on("click", function() {
+                funciones.usuarios.crearUsuario();
+            })
+            $(".btnEliminar").on("click", function() {
+                var id = $(this).data("id");
+                funciones.usuarios.eliminarUsuario(id);
             })
         },
         paginacion: function(elementosPorPagina) {
