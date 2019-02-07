@@ -224,13 +224,31 @@
                            </div>
                         </div>
                   </div>
+                  <div class="modal fade" id="modalActivarUsuario" role="dialog">
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title">Aviso!</h4>
+                           </div>
+                           <div class="modal-body">
+                              <p>El usuario con el email <strong><span></span></strong> ya se encuentra registrado, desea activarlo de nuevo?</p>
+                              <button type="button" class="btnActivarUsuario btn btn-danger" data-dismiss="modal" value="si">Si</button>
+                              <button type="button" class="btnActivarUsuario btn btn-success" data-dismiss="modal" value="no">No</button>
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                           </div>
+                        </div>
+                     </div>
+               </div>
                </div>
             </div>
          </div>
-         <div class="alert alert-success put">
-            <strong>Listo!</strong> El usuario se ha actualizado con éxito.
+         <div class="alert resp-services">
+            <strong></strong><span></span>
          </div>
-         <div class="alert alert-danger contadorSesion">
+      <!--   <div class="alert resp-services alert-danger contadorSesion">
              
          </div>
          <div class="alert alert-success post crearUsuario">
@@ -238,7 +256,7 @@
          </div>
          <div class="alert alert-success delete eliminarUsuario">
             <strong>Listo!</strong> El usuario se ha eliminado con éxito.
-         </div>
+         </div>-->
       </div>
       <script>
          $(function(){

@@ -261,6 +261,23 @@ var funciones = {
                     funciones.usuarios.buscar();
                 })
         },
+        inactivos: function() {
+            return new Promise(function(usuarios) {
+                opciones = {
+                    "method": "GET",
+                    "async": true,
+                    "url": "/usuario?estado=false",
+                    "headers": {
+                        "token": localStorage.getItem('token'),
+                    }
+                }
+                $.ajax(opciones)
+                    .done(usuarios)
+                    .fail(function() {
+                        console.log("Error en el servicio al consultar los usuarios inactivos");
+                    })
+            })
+        },
     },
     usuarios: {
 
@@ -356,12 +373,7 @@ var funciones = {
                     }
                     funciones.usuarios.servicioEditar(usuario[0]._id, datos)
                     .then(function(respuesta){
-                        if ( respuesta.ok == true ){
-                            $('.alert.put').slideDown("slow");
-                            setTimeout(function(){
-                                $('.alert.put').slideUp("slow");
-                            },5000)
-                        }
+                        funciones.utilidades.respPostPutDelete(respuesta,'editado');
                     })
                     $('#modalEditar .modal-footer .btn').trigger('click');
                     $("#paginacionLista .pagination, #usuariosPorPagina").empty()
@@ -397,11 +409,31 @@ var funciones = {
                     }
                     funciones.usuarios.servicioCrear(datos)
                     .then(function(respuesta){
-                        if ( respuesta.ok == true ){
-                            $('.alert.post.crearUsuario').slideDown("slow");
-                            setTimeout(function(){
-                                $('.alert.post.crearUsuario').slideUp("slow");
-                            },5000)
+                        funciones.utilidades.respPostPutDelete(respuesta,'creado');
+                    }).catch(function(respuesta){
+                        if (respuesta.responseJSON.err.errors.email.message == 'email debe de ser único' ){
+                            $('#modalActivarUsuario .modal-body span').text(email);
+                            $('#modalActivarUsuario').modal('show');
+                            $('.btnActivarUsuario').on('click', function(){
+                                var r = $(this).val();
+                                if(r == 'si'){
+                                    var datos = {
+                                        'estado' : true,
+                                    }
+                                    funciones.obtenerUsuarios.inactivos()
+                                    .then(function(inactivos){
+                                        var usuario = inactivos.data.filter(function(usuario) {
+                                            return usuario.email == email
+                                        })
+                                        funciones.usuarios.servicioEditar(usuario[0]._id, datos)
+                                        .then(function(respuesta){
+                                            funciones.utilidades.respPostPutDelete(respuesta,'activado');
+                                            $("#paginacionLista .pagination, #usuariosPorPagina").empty()
+                                            funciones.inicio();
+                                        })
+                                    });
+                                }
+                            })
                         }
                     })
                     $('#modalCrear .modal-footer .btn').trigger('click');
@@ -426,12 +458,7 @@ var funciones = {
                 if(respuesta == 'si'){
                     funciones.usuarios.servicioEliminar(id)
                     .then(function(respuesta){
-                        if ( respuesta.ok == true ){
-                            $('.alert.delete.eliminarUsuario').slideDown("slow");
-                            setTimeout(function(){
-                                $('.alert.delete.eliminarUsuario').slideUp("slow");
-                            },5000)
-                        }
+                        funciones.utilidades.respPostPutDelete(respuesta,'eliminado');
                     })
                     $('#modalEliminar .modal-footer .btn').trigger('click');
                     $("#paginacionLista .pagination, #usuariosPorPagina").empty()
@@ -441,16 +468,26 @@ var funciones = {
 
         },
         listar: function(listUsuarios) {
+            var usuarioActual = JSON.parse(localStorage.getItem("usuario"))
+            var disabled = '';
+            if(usuarioActual.role !== 'ADMIN_ROLE'){
+                disabled = 'disabled = true'
+                $('button.btnCrear').prop('disabled', true);
+            }else{
+                disabled = ''
+                $('button.btnCrear').prop('disabled', false);
+            }
+
             funciones.usuarios.saludarUsuario();
             $("#lista tbody tr").remove();
-            listUsuarios.map(function(usuario) {
+            listUsuarios.map(function(usuario, index) {
                 var elemUsuario = '<tr id="' + usuario._id + '">' +
                     '<td class="id">' + usuario._id + '</td>' +
                     '<td class="nombre">' + usuario.first_name + '</td>' +
                     '<td class="apellido">' + usuario.last_name + '</td>' +
                     '<td class="acciones"> <button type="button" class="btnDetalles btn btn-primary glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles" data-id="' + usuario._id + '"></button>'+
-                    '<button type="button" class="btnEditar btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalEditar" data-id="' + usuario._id + '"></button>'+
-                    '<button type="button" class="btnEliminar btn btn-danger glyphicon glyphicon-remove" data-toggle="modal" data-target="#modalEliminar" data-id="' + usuario._id + '"></button>'+
+                    '<button type="button" class="btnEditar btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalEditar" data-id="'+usuario._id+'"'+disabled+'></button>'+
+                    '<button type="button" class="btnEliminar btn btn-danger glyphicon glyphicon-remove" data-toggle="modal" data-target="#modalEliminar" data-id="' + usuario._id + '"'+disabled+'></button>'+
                     ' </td>' +
                     '</tr>';
                 $("#lista tbody").append(elemUsuario);
@@ -618,10 +655,10 @@ var funciones = {
                 case "id":
                     listUsuarios.sort(function(a, b) {
                         if (orden == "descendente") {
-                            return a.id - b.id
+                            return a._id - b._id
                         }
                         if (orden == "ascendente") {
-                            return b.id - a.id
+                            return b._id - a._id
                         }
                     })
                     break;
@@ -634,6 +671,28 @@ var funciones = {
             $(elemBorrar).remove();
             funciones.usuarios.paginacion(usuariosPorPagina);
             $("#paginacionLista .pagination li").eq(pagActiva).trigger("click")
+        }
+    },
+    utilidades: {
+        respPostPutDelete : function(respuesta, palabra){
+            if ( respuesta.ok == true ){
+                $('.alert.resp-services').addClass('alert-success');
+                $('.alert.resp-services strong').text('Listo! ');
+                $('.alert.resp-services span').text(`El usuario se ha ${palabra} con éxito.`);
+                $('.alert.resp-services').slideDown("slow");
+                setTimeout(function(){
+                    $('.alert.resp-services').slideUp("slow");
+                },5000)
+            }
+            if (respuesta.ok == false ){
+                $('.alert.resp-services').addClass('alert-danger');
+                $('.alert.resp-services strong').text('Error! ');
+                $('.alert.resp-services span').text('Sólo un usuario ADMIN puede hacer eso.');
+                $('.alert.resp-services').slideDown("slow");
+                setTimeout(function(){
+                    $('.alert.resp-services').slideUp("slow");
+                },5000)
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ let rolesValidos = { // Definimos un objeto con los roles permitidos en el esque
 
 
 let Schema = mongoose.Schema; // Creamos el objeto Schema de moongose.
+let autoIncrement = require('mongoose-auto-increment'); // Usamos este plugin para crear un id con incremeto automatico
 
 /*
 Basicamente aqui vamos a definir la estructura del objeto 'Usuario' dentro de nuestra base de datos.
@@ -80,6 +81,8 @@ usuarioSchema.methods.toJSON = function() {
 // que los campos sean unicos y devolver un mensaje en caso que no lo sean
 // =============================================================================
 usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' });
+autoIncrement.initialize(mongoose.connection);
+usuarioSchema.plugin(autoIncrement.plugin, 'Usuario'); // Usamos este plugin para crear un id con incremeto automatico
 
 //Exportamos el esquema del usuario.
 module.exports = mongoose.model('Usuario', usuarioSchema);

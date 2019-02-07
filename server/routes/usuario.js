@@ -29,33 +29,59 @@ app.get('/usuario', verificaToken, (req, res) => {
     // si no se coloca nada llegarán por defecto solo 5 registros.
     // ========================================================================================
 
+    let estado = req.query.estado || 'true';
+
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
     let cantidad = req.query.cantidad || 5;
     cantidad = Number(cantidad);
 
-    Usuario.find({ estado: true }, 'first_name last_name email role estado avatar') // Buscamos registros con estado 'true' y traemos los campos especificados.
-        .skip(desde) // Saltamos con 'skip' la cantidad de registros que vienen en el parámetro 'desde'.
-        .limit(cantidad) // Traemos con 'limit' la cantidad de registros que coloquemos en el parámetro 'cantidad'.
-        .exec((err, usuarios) => { // ejecutamos la función 'find' con las condiciones que pasamos.
+    if(estado == 'true'){
 
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
+        Usuario.find({ estado: true }, 'first_name last_name email role estado avatar') // Buscamos registros con estado 'true' y traemos los campos especificados.
+            .skip(desde) // Saltamos con 'skip' la cantidad de registros que vienen en el parámetro 'desde'.
+            .limit(cantidad) // Traemos con 'limit' la cantidad de registros que coloquemos en el parámetro 'cantidad'.
+            .exec((err, usuarios) => { // ejecutamos la función 'find' con las condiciones que pasamos.
 
-            Usuario.count({ estado: true }, (err, cantidad) => { // Contamos la cantidad de registros 
-                res.json({ // Retornamos el json con los registros dentro de las condiciones y la cantidad de registros.
-                    ok: true,
-                    data: usuarios,
-                    cantidad
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+                Usuario.count({ estado: true }, (err, cantidad) => { // Contamos la cantidad de registros 
+                    res.json({ // Retornamos el json con los registros dentro de las condiciones y la cantidad de registros.
+                        ok: true,
+                        data: usuarios,
+                        cantidad
+                    });
                 });
             });
-        });
+    }
+    if(estado == 'false'){
+        Usuario.find({ estado: false }, 'first_name last_name email role estado avatar') // Buscamos registros con estado 'false' y traemos los campos especificados.
+            .skip(desde) // Saltamos con 'skip' la cantidad de registros que vienen en el parámetro 'desde'.
+            .limit(cantidad) // Traemos con 'limit' la cantidad de registros que coloquemos en el parámetro 'cantidad'.
+            .exec((err, usuarios) => { // ejecutamos la función 'find' con las condiciones que pasamos.
 
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                    });
+                }
+
+                Usuario.count({ estado: false }, (err, cantidad) => { // Contamos la cantidad de registros 
+                    res.json({ // Retornamos el json con los registros dentro de las condiciones y la cantidad de registros.
+                        ok: true,
+                        data: usuarios,
+                        cantidad
+                    });
+                });
+            });
+    }
 
 });
 
