@@ -6,8 +6,11 @@ const mongoose = require('mongoose'); //Traemos la funcionalidad del paquete mon
 const bcrypt = require('bcryptjs'); //Traemos la funcionalidad del paquete bcryptjs.
 const Usuario = require('./models/usuario'); //Traemos el esquema de usuario que exportamos en el modelo.
 
+var cors = require('cors'); // Biblioteca CORS para recibir peticiones de distintos orígenes.
 
 const app = express(); // Declaramos app como una instancia del objeto express.
+
+app.use(cors()); // Access-Control-Allow-Origin: *
 
 const bodyParser = require('body-parser');
 
