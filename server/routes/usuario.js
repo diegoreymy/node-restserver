@@ -143,7 +143,7 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) 
 
 app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
 
-
+    let mantener = req.query.mantener || 'true';
     let id = req.params.id;
 
     // ============================================================================================
@@ -156,30 +156,52 @@ app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, re
         estado: false
     };
 
-    Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioBorrado) => {
+    if(mantener == 'true'){
 
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
+        Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioBorrado) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            };
+            if (!usuarioBorrado) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'Usuario no encontrado'
+                    }
+                });
+            }
+            res.json({
+                ok: true,
+                usuario: usuarioBorrado
             });
-        };
-
-        if (!usuarioBorrado) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Usuario no encontrado'
-                }
-            });
-        }
-
-        res.json({
-            ok: true,
-            usuario: usuarioBorrado
         });
+    }
+    if(mantener == 'false'){
 
-    });
+        Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            };
+            if (!usuarioBorrado) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'Usuario no encontrado'
+                    }
+                });
+            }
+            res.json({
+                ok: true,
+                usuario: usuarioBorrado
+            });
+        });
+    }
 
 
 
