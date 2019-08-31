@@ -480,18 +480,20 @@ var funciones = {
 
             funciones.usuarios.saludarUsuario();
             $("#lista tbody tr").remove();
-            listUsuarios.map(function(usuario, index) {
-                var elemUsuario = '<tr id="' + usuario._id + '">' +
-                    '<td class="id">' + usuario._id + '</td>' +
-                    '<td class="nombre">' + usuario.first_name + '</td>' +
-                    '<td class="apellido">' + usuario.last_name + '</td>' +
-                    '<td class="acciones"> <button type="button" class="btnDetalles btn btn-primary glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles" data-id="' + usuario._id + '"></button>'+
-                    '<button type="button" class="btnEditar btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalEditar" data-id="'+usuario._id+'"'+disabled+'></button>'+
-                    '<button type="button" class="btnEliminar btn btn-danger glyphicon glyphicon-remove" data-toggle="modal" data-target="#modalEliminar" data-id="' + usuario._id + '"'+disabled+'></button>'+
-                    ' </td>' +
-                    '</tr>';
-                $("#lista tbody").append(elemUsuario);
-            })
+            if(listUsuarios){
+                listUsuarios.map(function(usuario, index) {
+                    var elemUsuario = '<tr id="' + usuario._id + '">' +
+                        '<td class="id">' + usuario._id + '</td>' +
+                        '<td class="nombre">' + usuario.first_name + '</td>' +
+                        '<td class="apellido">' + usuario.last_name + '</td>' +
+                        '<td class="acciones"> <button type="button" class="btnDetalles btn btn-primary glyphicon glyphicon-eye-open" data-toggle="modal" data-target="#modalDetalles" data-id="' + usuario._id + '"></button>'+
+                        '<button type="button" class="btnEditar btn btn-warning glyphicon glyphicon-edit" data-toggle="modal" data-target="#modalEditar" data-id="'+usuario._id+'"'+disabled+'></button>'+
+                        '<button type="button" class="btnEliminar btn btn-danger glyphicon glyphicon-remove" data-toggle="modal" data-target="#modalEliminar" data-id="' + usuario._id + '"'+disabled+'></button>'+
+                        ' </td>' +
+                        '</tr>';
+                    $("#lista tbody").append(elemUsuario);
+                })
+            }
             funciones.usuarios.clickAcciones();
         },
         buscar: function() {
