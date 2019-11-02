@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.2.0",
-    "mongoose": "^5.0.9",
+    "mongoose": "^5.7.5",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-unique-validator": "^2.0.0",
     "underscore": "^1.8.3"
